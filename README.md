@@ -24,6 +24,7 @@ convert out.png -resize  x2048 6.png
 convert out.png -resize  x4096 7.png
 convert out.png -resize  x8192 8.png
 ```
+
 Note that size 9 uses ~60 GB of memory, so this is max usable.
 
 ```
@@ -42,8 +43,20 @@ after this you run the http-server with the index.html and make sure that the fi
 
 Note: there is still a problem along the right hand side. Data is being cut off when zooming in/out.
 
+# Trying again with padded image, UPDATE: this works!
+Original image size 89911 x 5262
+11 * 8192 = 90112
+89911 --> 90112
 
+>>> 5262 / 512
+10.27734375
+>>> 512 * 11
+5632
 
+width: 90112
+height: 5632
 
-
+So the out.png needs to be divisible by the largest zoom value, e.g. 8192.
+so buffer the pic with that on the right. new dimensions becomes
+90112x5632
 

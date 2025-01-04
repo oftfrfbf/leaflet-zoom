@@ -54,10 +54,8 @@ p {
 //var tileURL = 'https://hb0707.s3.us-east-1.amazonaws.com/with_bottom/tiles/{z}_{x}_{y}.png';
 var tileURL = './w/tiles/{z}_{x}_{y}.png';
 var tileURL2 = './wo/tiles/{z}_{x}_{y}.png';
-//var w = 89991;
-//var h = 4096;
-var w = 139975;
-var h = 8192;
+var w = 131072; // this is the size of largest buffered image, 8.png
+var h = 8192; //8192;
 
 var mapMinZoom = 0;
 var mapMaxZoom = 8;
@@ -81,13 +79,15 @@ var tileLayer2 = L.tileLayer(
 });
 
 var map = L.map('map', {
-        center: [0, 0],
+        crs: L.CRS.Simple,
+		center: [0, 0],
         zoom: 1,
         minZoom: mapMinZoom,
         maxZoom: mapMaxZoom,
-        attributionControl: false,
-        crs: L.CRS.Simple,
         layers: [tileLayer, tileLayer2],
+		attributionControl: false,
+        
+        
 });
 
 // Problem here probably because tiles are not perfectly square
@@ -103,6 +103,12 @@ const baseLayers = {
 };
 
 const layerControl = L.control.layers(baseLayers).addTo(map);
+
+map.addEventListener('mouseup', function(ev) {
+   yy = ev.latlng.lat;
+   xx = ev.latlng.lng;
+   console.log('xx: ' + String(xx) + ', yy: ' + String(yy));
+});
 
 </script>
 
