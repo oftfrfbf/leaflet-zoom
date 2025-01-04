@@ -40,6 +40,7 @@ convert -verbose 8.png -crop 512x512 +adjoin -background none -extent 512x512 -s
 
 after this you run the http-server with the index.html and make sure that the files are in right spot
 
+Note: there is still a problem along the right hand side. Data is being cut off when zooming in/out.
 
 
 
