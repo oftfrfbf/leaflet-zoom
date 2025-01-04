@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Lacquer&family=Londrina+Shadow&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="crossorigin=""/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
@@ -20,9 +23,9 @@ html, body { height: 100%; margin: 0; }
         width: 100vw;
         height: 100vh;
 }
-.leaflet-container { background: #CCFF99; }
+.leaflet-container { background: #CCFFFF; }
 p {
-  font-family: "Lacquer", serif;
+  font-family: "Chakra Petch", serif;
   font-weight: 400;
   font-style: normal;
   font-size: 1.2em;
@@ -42,19 +45,22 @@ p {
 </head>
 <body>
 <div class="box">
-        <p class="title">ship: Henry_B._Bigelow, cruise: HB0707</p>
+        <p class="title">Ship: Henry_B._Bigelow, Cruise: HB0707</p>
 </div>
 <div id="maps">
     <div id='map' class="map"></div>
 </div>
 <script type="text/javascript">
 //var tileURL = 'https://hb0707.s3.us-east-1.amazonaws.com/with_bottom/tiles/{z}_{x}_{y}.png';
-var tileURL = './with_bottom/tiles/{z}_{x}_{y}.png';
-var tileURL2 = './without_bottom/tiles/{z}_{x}_{y}.png';
-var w = 76521;
-var h = 4096;
+var tileURL = './w/tiles/{z}_{x}_{y}.png';
+var tileURL2 = './wo/tiles/{z}_{x}_{y}.png';
+//var w = 89991;
+//var h = 4096;
+var w = 139975;
+var h = 8192;
+
 var mapMinZoom = 0;
-var mapMaxZoom = 7;
+var mapMaxZoom = 8;
 var tileLayer = L.tileLayer(
     tileURL, {
     minZoom: mapMinZoom,
@@ -72,12 +78,11 @@ var tileLayer2 = L.tileLayer(
     noWrap: true,
     tileSize: 512,
     crs: L.CRS.Simple,
-}); // .addTo(map);
-
+});
 
 var map = L.map('map', {
         center: [0, 0],
-        zoom: 0,
+        zoom: 1,
         minZoom: mapMinZoom,
         maxZoom: mapMaxZoom,
         attributionControl: false,
@@ -85,15 +90,16 @@ var map = L.map('map', {
         layers: [tileLayer, tileLayer2],
 });
 
+// Problem here probably because tiles are not perfectly square
 var mapBounds = new L.LatLngBounds(
-    map.unproject([0, h], mapMaxZoom), // southwest
-    map.unproject([w, 0], mapMaxZoom), // northeast
+    map.unproject([0, h], mapMaxZoom), // bottom-left
+    map.unproject([w, 0], mapMaxZoom), // top-right
 );
 map.setMaxBounds(mapBounds);
 
 const baseLayers = {
-        'WithBottom': tileLayer,
-        'WithoutBottom': tileLayer2,
+	'With Sub Bottom': tileLayer,
+	'Without Sub Bottom': tileLayer2,
 };
 
 const layerControl = L.control.layers(baseLayers).addTo(map);

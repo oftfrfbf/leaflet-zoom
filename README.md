@@ -38,7 +38,7 @@ convert -verbose 7.png -crop 512x512 +adjoin -background none -extent 512x512 -s
 convert -verbose 8.png -crop 512x512 +adjoin -background none -extent 512x512 -set filename:tile "%[fx:floor(page.x/512)]_%[fx:floor(page.y/512)]" +repage "tiles/8_%[filename:tile].png"
 ```
 
-after this you 
+after this you run the http-server with the index.html and make sure that the files are in right spot
 
 
 
