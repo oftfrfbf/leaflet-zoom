@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Grid coordinates - Leaflet</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lacquer&family=Londrina+Shadow&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="crossorigin=""></script>
+
+<style>
+html, body { height: 100%; margin: 0; }
+#map {
+        float: left;
+        width: 100vw;
+        height: 100vh;
+}
+.leaflet-container { background: #CCFF99; }
+p {
+  font-family: "Lacquer", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.2em;
+  color: #CCFFFF;
+  background-color: rgba(51, 0, 102, 0.5);
+}
+.title {
+    position: absolute;
+    bottom: 0;
+    margin: 10px;
+    padding: 10px;
+    left: 0;
+    z-index: 999;
+}
+</style>
+
+</head>
+<body>
+<div class="box">
+        <p class="title">ship: Henry_B._Bigelow, cruise: HB0707</p>
+</div>
+<div id="maps">
+    <div id='map' class="map"></div>
+</div>
+<script type="text/javascript">
+//var tileURL = 'https://hb0707.s3.us-east-1.amazonaws.com/with_bottom/tiles/{z}_{x}_{y}.png';
+var tileURL = './with_bottom/tiles/{z}_{x}_{y}.png';
+var tileURL2 = './without_bottom/tiles/{z}_{x}_{y}.png';
+var w = 76521;
+var h = 4096;
+var mapMinZoom = 0;
+var mapMaxZoom = 7;
+var tileLayer = L.tileLayer(
+    tileURL, {
+    minZoom: mapMinZoom,
+    maxZoom: mapMaxZoom,
+    continuousWorld: true,
+    noWrap: true,
+    tileSize: 512,
+    crs: L.CRS.Simple,
+});
+var tileLayer2 = L.tileLayer(
+    tileURL2, {
+    minZoom: mapMinZoom,
+    maxZoom: mapMaxZoom,
+    continuousWorld: true,
+    noWrap: true,
+    tileSize: 512,
+    crs: L.CRS.Simple,
+}); // .addTo(map);
+
+
+var map = L.map('map', {
+        center: [0, 0],
+        zoom: 0,
+        minZoom: mapMinZoom,
+        maxZoom: mapMaxZoom,
+        attributionControl: false,
+        crs: L.CRS.Simple,
+        layers: [tileLayer, tileLayer2],
+});
+
+var mapBounds = new L.LatLngBounds(
+    map.unproject([0, h], mapMaxZoom), // southwest
+    map.unproject([w, 0], mapMaxZoom), // northeast
+);
+map.setMaxBounds(mapBounds);
+
+const baseLayers = {
+        'WithBottom': tileLayer,
+        'WithoutBottom': tileLayer2,
+};
+
+const layerControl = L.control.layers(baseLayers).addTo(map);
+
+</script>
+
+</body>
+</html>
